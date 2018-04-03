@@ -151,14 +151,27 @@ else if (process.argv[2] === "do-what-it-says") {
 				// var exec = require('child_process').exec;
 				// exec('pwd', function callback(error, stdout, stderr) {
 				// result
+
+
+
+
+				//exec('"/path/to/test file/test.sh" arg1 arg2');
+				//Double quotes are used so that the space in the path is not interpreted as
+				//multiple arguments
+
+				// exec('"~/Desktop/coding/liri-node-app node liri.js" command input');
+
+
+
+
+				// }
+
 			});
 
 
 
 
-			//exec('"/path/to/test file/test.sh" arg1 arg2');
-			//Double quotes are used so that the space in the path is not interpreted as
-			//multiple arguments
+
 
 		}
 
