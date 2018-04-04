@@ -128,6 +128,13 @@ else if (process.argv[2] === "do-what-it-says") {
 
 		else {
 
+
+			//this is buggy because if it encounters movies with commas in the titles, like "Trains, Planes, & Automobiles" will
+			// get cut off at planes (the first comma) and search just for that.  
+
+
+
+
 			// Break down the command inside
 			data = data.split(",");
 
