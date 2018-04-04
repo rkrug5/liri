@@ -22,8 +22,7 @@ var client = new Twitter(keys.twitter);
 
 //this makes liri do the movie info
 if (process.argv[2] === "movie-this") {
-
-
+	// 
 
 	// Include the request npm package 
 	var request = require("request");
@@ -143,44 +142,101 @@ else if (process.argv[2] === "do-what-it-says") {
 			//going to try this
 			//https://stackoverflow.com/questions/5775088/how-to-execute-an-external-program-from-within-node-js
 
-			var exec = require('child_process').exec;
-			exec('node  liri.js  ' + command + ' ' + input, function callback(error, stdout, stderr) {
+			// var exec = require('child_process').exec;
+			// exec('node ' + __dirname + '/liri.js  ' + command + ' ' + input, function callback(error, stdout, stderr) {
 
-				// });
+			// var exec = require('child_process').exec;
+			// exec('pwd', function callback(error, stdout, stderr) {
+			// result
 
-				// var exec = require('child_process').exec;
-				// exec('pwd', function callback(error, stdout, stderr) {
-				// result
+			//ok, this isn't going to work, TJ recommended to try recursion and I am going to attempt that this might quick and dirty, but let's see if it works
 
+			if (command === "spotify-this-song") {
 
-
-
-				//exec('"/path/to/test file/test.sh" arg1 arg2');
-				//Double quotes are used so that the space in the path is not interpreted as
-				//multiple arguments
-
-				// exec('"~/Desktop/coding/liri-node-app node liri.js" command input');
+				var song = input;
 
 
 
+				spotify.search({ type: 'track', query: song }, function (err, data) {
+					if (err) {
+						return console.log('Error occurred: ' + err);
+					}
 
-				// }
-
-			});
-
+					// console.log((JSON.stringify(data)));
+					//https://stackoverflow.com/questions/47657135/how-to-extract-data-from-spotify-npm-package-i-keep-getting-undefine
 
 
+					console.log(" ");
+					console.log(data.tracks.items[0].artists[0].name);
+					console.log(data.tracks.items[0].name);
+					console.log(data.tracks.items[0].album.external_urls.spotify);
+					console.log(data.tracks.items[0].album.name);
 
 
+
+				});
+
+
+			} else if (command === "my-tweets") {
+
+
+				var params = { screen_name: 'rkrug1123' };
+				client.get('statuses/user_timeline', params, function (error, tweets, response) {
+					if (!error) {
+						console.log(tweets[7].text);
+						console.log(tweets[6].text);
+						console.log(tweets[5].text);
+						console.log(tweets[4].text);
+						console.log(tweets[3].text);
+						console.log(tweets[2].text);
+						console.log(tweets[1].text);
+						console.log(tweets[0].text);
+						console.log(tweets[0].created_at);
+
+					}
+
+				})
+
+
+
+
+
+			} else if (command === "movie-this") {
+				// 
+
+				// Include the request npm package 
+				var request = require("request");
+
+
+				//user's in put will be node liri.js "movie title"
+				var title = input;
+
+
+				title = title.replace(' ', '+');
+
+				// Then run a request to the OMDB API with the movie specified
+				request("http://www.omdbapi.com/?t=" + title + "&y=&plot=short&apikey=trilogy", function (error, response, body) {
+
+					// If the request is successful (i.e. if the response status code is 200)
+					if (!error && response.statusCode === 200) {
+
+						// Parse the body of the site and recover just the imdbRating
+						// (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
+						console.log("Title: " + JSON.parse(body).Title);
+						console.log("Release Date: " + JSON.parse(body).Released);
+						console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
+						console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value);
+						console.log("Country: " + JSON.parse(body).Country);
+						console.log("Language: " + JSON.parse(body).Language);
+						console.log("Plot: " + JSON.parse(body).Plot);
+						console.log("Actors: " + JSON.parse(body).Actors);
+
+					}
+				});
+
+			}
 
 		}
 
-
-
-
-
-
-
-
-	})
+	});
 }
